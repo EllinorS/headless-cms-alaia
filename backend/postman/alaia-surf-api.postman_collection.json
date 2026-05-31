@@ -1,0 +1,425 @@
+{
+  "info": {
+    "name": "ALAIA Surf API",
+    "description": "Backend REST API (Express 5). Auth = HttpOnly cookie `auth_token` set by POST /api/auth/login. Postman stores it in the cookie jar and resends it automatically on protected routes. Run Login first, then admin routes work. baseUrl variable = http://localhost:3000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "type": "string" },
+    { "key": "formId", "value": "1", "type": "string" },
+    { "key": "fieldId", "value": "1", "type": "string" },
+    { "key": "optionId", "value": "1", "type": "string" },
+    { "key": "mediaId", "value": "1", "type": "string" },
+    { "key": "submissionId", "value": "1", "type": "string" },
+    { "key": "sessionId", "value": "1", "type": "string" },
+    { "key": "userId", "value": "2", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /api/health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /api/auth/login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"yourpassword\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] },
+            "description": "Sets the HttpOnly auth_token + refresh cookies. Run this first."
+          }
+        },
+        {
+          "name": "GET /api/auth/user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/auth/user", "host": ["{{baseUrl}}"], "path": ["api", "auth", "user"] },
+            "description": "Current logged-in user. Needs auth cookie."
+          }
+        },
+        {
+          "name": "POST /api/auth/logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/auth/logout", "host": ["{{baseUrl}}"], "path": ["api", "auth", "logout"] }
+          }
+        },
+        {
+          "name": "POST /api/auth/verify",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"email-verification-token\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/verify", "host": ["{{baseUrl}}"], "path": ["api", "auth", "verify"] }
+          }
+        },
+        {
+          "name": "POST /api/auth/reset-password-request",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/reset-password-request", "host": ["{{baseUrl}}"], "path": ["api", "auth", "reset-password-request"] }
+          }
+        },
+        {
+          "name": "POST /api/auth/reset-password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"reset-token\",\n  \"password\": \"NewPass123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["api", "auth", "reset-password"] },
+            "description": "Password must be 8+ chars, 1 uppercase, 1 number."
+          }
+        },
+        {
+          "name": "POST /api/auth/users (invite, SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"coach@example.com\",\n  \"firstName\": \"New\",\n  \"lastName\": \"Coach\",\n  \"role\": \"COACH\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/users", "host": ["{{baseUrl}}"], "path": ["api", "auth", "users"] }
+          }
+        },
+        {
+          "name": "DELETE /api/auth/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/auth/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "auth", "{{userId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "GET /api/sessions/public",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/sessions/public", "host": ["{{baseUrl}}"], "path": ["api", "sessions", "public"] }
+          }
+        },
+        {
+          "name": "GET /api/sessions (SUPER_ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/sessions", "host": ["{{baseUrl}}"], "path": ["api", "sessions"] }
+          }
+        },
+        {
+          "name": "POST /api/sessions (SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"date\": \"2026-06-01\",\n  \"time\": \"09:00\",\n  \"type\": \"Group - Adults\",\n  \"duration\": \"2h\",\n  \"price\": 80\n}" },
+            "url": { "raw": "{{baseUrl}}/api/sessions", "host": ["{{baseUrl}}"], "path": ["api", "sessions"] },
+            "description": "type must be 'Group - Adults' or 'Group - Kids'. date = YYYY-MM-DD."
+          }
+        },
+        {
+          "name": "DELETE /api/sessions/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/sessions/{{sessionId}}", "host": ["{{baseUrl}}"], "path": ["api", "sessions", "{{sessionId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "item": [
+        {
+          "name": "POST /api/contact (public)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"+64 21 123 4567\",\n  \"subject\": \"Question about lessons\",\n  \"message\": \"Hi, do you offer beginner lessons?\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/contact", "host": ["{{baseUrl}}"], "path": ["api", "contact"] },
+            "description": "Email-only, no DB record. phone is optional."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Submissions",
+      "item": [
+        {
+          "name": "POST /api/submissions (public)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"formId\": 1,\n  \"client\": {\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\",\n    \"email\": \"jane@example.com\",\n    \"phone\": \"+64 21 123 4567\"\n  },\n  \"answers\": [\n    { \"fieldId\": 1, \"value\": \"beginner\" },\n    { \"fieldId\": 2, \"value\": \"surf,yoga\" }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/submissions", "host": ["{{baseUrl}}"], "path": ["api", "submissions"] },
+            "description": "Surf-trip-request quiz answers. answers must have at least 1 item."
+          }
+        },
+        {
+          "name": "GET /api/submissions (SUPER_ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/submissions", "host": ["{{baseUrl}}"], "path": ["api", "submissions"] }
+          }
+        },
+        {
+          "name": "GET /api/submissions/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/submissions/{{submissionId}}", "host": ["{{baseUrl}}"], "path": ["api", "submissions", "{{submissionId}}"] }
+          }
+        },
+        {
+          "name": "PATCH /api/submissions/:id/status (SUPER_ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"READ\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/submissions/{{submissionId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "submissions", "{{submissionId}}", "status"] },
+            "description": "status: NEW | READ | REPLIED | ARCHIVED."
+          }
+        },
+        {
+          "name": "DELETE /api/submissions/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/submissions/{{submissionId}}", "host": ["{{baseUrl}}"], "path": ["api", "submissions", "{{submissionId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Forms",
+      "item": [
+        {
+          "name": "POST /api/forms (SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Surf Trip Request\",\n  \"type\": \"SURF_TRIP_REQUEST\",\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/forms", "host": ["{{baseUrl}}"], "path": ["api", "forms"] },
+            "description": "type: CONTACT | SURF_TRIP_REQUEST."
+          }
+        },
+        {
+          "name": "GET /api/forms (SUPER_ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms", "host": ["{{baseUrl}}"], "path": ["api", "forms"] }
+          }
+        },
+        {
+          "name": "GET /api/forms/:id (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms/{{formId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "{{formId}}"] },
+            "description": "Public — quiz page fetches the active form with its fields + options."
+          }
+        },
+        {
+          "name": "PUT /api/forms/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Surf Trip Request (updated)\",\n  \"isActive\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/api/forms/{{formId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "{{formId}}"] }
+          }
+        },
+        {
+          "name": "DELETE /api/forms/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms/{{formId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "{{formId}}"] }
+          }
+        },
+        {
+          "name": "POST /api/forms/:formId/fields (SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"What is your surf level?\",\n  \"type\": \"SINGLE\",\n  \"displayType\": \"CARDS\",\n  \"position\": 0,\n  \"isRequired\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/forms/{{formId}}/fields", "host": ["{{baseUrl}}"], "path": ["api", "forms", "{{formId}}", "fields"] },
+            "description": "type: SINGLE | MULTIPLE | RANK | TEXT. displayType: CARDS | SLIDER | CHECKBOX | RADIO."
+          }
+        },
+        {
+          "name": "GET /api/forms/fields/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms/fields/{{fieldId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "fields", "{{fieldId}}"] }
+          }
+        },
+        {
+          "name": "PUT /api/forms/fields/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"What is your surf level? (updated)\",\n  \"isRequired\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/api/forms/fields/{{fieldId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "fields", "{{fieldId}}"] }
+          }
+        },
+        {
+          "name": "DELETE /api/forms/fields/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms/fields/{{fieldId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "fields", "{{fieldId}}"] }
+          }
+        },
+        {
+          "name": "POST /api/forms/fields/:fieldId/options (SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"Beginner\",\n  \"value\": \"beginner\",\n  \"position\": 0\n}" },
+            "url": { "raw": "{{baseUrl}}/api/forms/fields/{{fieldId}}/options", "host": ["{{baseUrl}}"], "path": ["api", "forms", "fields", "{{fieldId}}", "options"] }
+          }
+        },
+        {
+          "name": "GET /api/forms/options/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms/options/{{optionId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "options", "{{optionId}}"] }
+          }
+        },
+        {
+          "name": "PUT /api/forms/options/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"Beginner (updated)\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/forms/options/{{optionId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "options", "{{optionId}}"] }
+          }
+        },
+        {
+          "name": "DELETE /api/forms/options/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/forms/options/{{optionId}}", "host": ["{{baseUrl}}"], "path": ["api", "forms", "options", "{{optionId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Site Content",
+      "item": [
+        {
+          "name": "GET /api/content (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/content", "host": ["{{baseUrl}}"], "path": ["api", "content"] }
+          }
+        },
+        {
+          "name": "GET /api/content/page/:pageName (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/content/page/home", "host": ["{{baseUrl}}"], "path": ["api", "content", "page", "home"] }
+          }
+        },
+        {
+          "name": "GET /api/content/key/:keyName (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/content/key/home_hero_title", "host": ["{{baseUrl}}"], "path": ["api", "content", "key", "home_hero_title"] }
+          }
+        },
+        {
+          "name": "PUT /api/content/key/:keyName (SUPER_ADMIN)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"value\": \"Welcome to ALAIA Surf\",\n  \"page\": \"home\",\n  \"label\": \"Hero Title\",\n  \"type\": \"TEXT\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/content/key/home_hero_title", "host": ["{{baseUrl}}"], "path": ["api", "content", "key", "home_hero_title"] },
+            "description": "type: TEXT | RICHTEXT | IMAGE_URL | NUMBER."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "GET /api/media (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/media", "host": ["{{baseUrl}}"], "path": ["api", "media"] }
+          }
+        },
+        {
+          "name": "GET /api/media/:id (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/media/{{mediaId}}", "host": ["{{baseUrl}}"], "path": ["api", "media", "{{mediaId}}"] }
+          }
+        },
+        {
+          "name": "POST /api/media (upload, SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "files", "type": "file", "src": [] }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/api/media", "host": ["{{baseUrl}}"], "path": ["api", "media"] },
+            "description": "Multipart upload to Cloudinary. Field name 'files', up to 100 files. Pick file(s) in the Body tab."
+          }
+        },
+        {
+          "name": "PUT /api/media/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"alt\": \"Surfer paddling out at dawn\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/media/{{mediaId}}", "host": ["{{baseUrl}}"], "path": ["api", "media", "{{mediaId}}"] }
+          }
+        },
+        {
+          "name": "DELETE /api/media/:id (SUPER_ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/media/{{mediaId}}", "host": ["{{baseUrl}}"], "path": ["api", "media", "{{mediaId}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}

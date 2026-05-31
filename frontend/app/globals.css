@@ -1,0 +1,157 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: oklch(0.704 0.191 22.216);
+  --radius-lg: var(--radius);
+
+  --color-green: var(--green);
+  --color-pale-green: var(--pale-green);
+  --color-gold: var(--gold);
+  --color-dark-gold: var(--dark-gold);
+  --color-blue: var(--blue);
+  --color-text: var(--text);
+  --color-blue-grey: var(--blue-grey);
+  --color-blue-light: var(--blue-light);
+}
+
+:root {
+  --background: #f5f2ee;
+  --foreground: #2e2622;
+  --primary: #1a7060;
+  --primary-foreground: #f5f2ee;
+  --secondary: #4a6870;
+  --secondary-foreground: #f5f2ee;
+  --accent: #e8a85e;
+  --accent-foreground: #2e2622;
+  --muted: #4a687018;
+  --muted-foreground: #7a95a3;
+  --border: #4a687038;
+  --input: #4a687038;
+  --ring: #1a7060;
+  --radius: 0.75rem;
+
+  --text: #2e2622;
+  --green: #1a7060;
+  --pale-green: #7a9590;
+  --gold: #e8a85e;
+  --dark-gold: #8b5522;
+  --blue: #7a95a3;
+  --blue-grey: #7a95a3;
+  --blue-light: #7299a3;
+}
+
+.dark {
+  --background: #0e1e2a;
+  --foreground: #e8eff4;
+  --primary: #50a9c6;
+  --primary-foreground: #0e1e2a;
+  --secondary: #152d3c;
+  --secondary-foreground: #e8eff4;
+  --accent: #e8a85e;
+  --accent-foreground: #0e1e2a;
+  --muted: #152d3c80;
+  --muted-foreground: #7fa8bb;
+  --border: #e8eff41e;
+  --input: #e8eff41e;
+  --ring: #e8a85e;
+  --radius: 0.75rem;
+
+  --text: #e8eff4;
+  --green: #1a7060;
+  --pale-green: #7a9590;
+  --gold: #e8a85e;
+  --dark-gold: #8b5522;
+  --blue: #5aafcc;
+  --blue-grey: #7a95a3;
+  --blue-light: #69c4d0;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .overlay-black::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  h3 {
+    @apply text-3xl sm:text-4xl font-bold mb-4;
+  }
+  h4 {
+    @apply text-sm font-semibold uppercase tracking-wider text-primary mb-4;
+  }
+}
+
+@utility eyebrow {
+  @apply text-xs font-semibold uppercase tracking-widest;
+}
+@utility heading-xl {
+  @apply text-4xl md:text-5xl font-black;
+}
+@utility heading-lg {
+  @apply text-3xl md:text-4xl font-black;
+}
+@utility icon-circle {
+  @apply w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center;
+}
+
+/* Full-screen logo round swallow animation that plays once on page load.
+   pointer-events:none lets clicks reach the page even while the loader is still visible.
+   The 1s delay (third value in animation shorthand) holds the animation for 1 s before it starts.
+   loader-swallow shrinks a clipping circle from full coverage to nothing, wiping the loader away. */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary);
+  pointer-events: none;
+  animation: loader-swallow 0.9s ease-in 1s both;
+}
+
+@keyframes loader-swallow {
+  from {
+    clip-path: circle(150% at 50% 50%);
+  } /* 150% ensures full coverage on wide screens */
+  to {
+    clip-path: circle(0% at 50% 50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
