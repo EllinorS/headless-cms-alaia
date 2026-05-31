@@ -52,7 +52,7 @@ export const login = asyncHandler(async (req, res) => {
   res.cookie('auth_token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'none',
     maxAge: ms(process.env.JWT_EXPIRES_IN ?? '7d'),
   });
 
@@ -104,7 +104,7 @@ export const logout = (req, res) => {
   res.clearCookie('auth_token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'none',
   });
   res.status(200).json({ message: 'Logged out' });
 };
