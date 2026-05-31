@@ -20,7 +20,7 @@ export default function NavbarMobileMenu() {
 
       {open && (
         <div className="fixed top-18 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-6xl
-          rounded-md border border-white/20 bg-white/20 backdrop-blur-xl
+          rounded-md border border-border bg-background backdrop-blur-xl
           shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-4 md:hidden">
           <div className="flex flex-col gap-1 text-sm font-medium">
             <Link href="/about" onClick={() => setOpen(false)} className="px-3 py-2 rounded-md hover:bg-white/10 transition-colors">About</Link>

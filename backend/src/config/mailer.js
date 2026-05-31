@@ -24,7 +24,6 @@ export const transporter = nodemailer.createTransport({
 transporter.verify((err) => {
   if (err) {
     console.error('SMTP error', err.message);
-    if (process.env.NODE_ENV === 'production') process.exit(1);
   } else {
     console.log('SMTP connected');
   }
