@@ -40,6 +40,9 @@ export const metadata: Metadata = {
     description: 'Professional surf lessons and custom surf road trips in Raglan, New Zealand.',
     images: ['/assets/surfer-ocean-new-zealand.webp'],
   },
+  icons: {
+    icon: '/assets/favicon.svg',
+  },
   robots: {
     index: true,
     follow: true,
